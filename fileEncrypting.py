@@ -13,24 +13,27 @@ class createKey:
         file.close()
 
 
-class encryptFile:
+class secureFile:
     def __init__(self, filename, key):
         self.key = key
         self.filename = filename
         self.fernet = Fernet(self.key)
-        self.readFile()
-        self.encrypted = self.fernet.encrypt(self.data)
-        self.getKey()
 
-    def getKey(self):
-        file = open("key.key", "rb")
-        file.read()
-        file.close()
-
-    def readFile(self):
-        with open(str(self.filename), "rb") as f:
+    def readFile(self, filename):
+        with open(str(filename), "rb") as f:
             self.data = f.read()
+            print("skrt")
 
     def encryptFile(self):
+        self.readFile(self.filename)
+        self.encrypted = self.fernet.encrypt(self.data)
         with open(str(self.filename) + ".encrypted", "wb") as f:
             f.write(self.encrypted)
+            print("finish")
+
+    def decryptFile(self):
+        self.readFile(self.filename + ".encrypted")
+        self.decrypted = self.fernet.decrypt(self.data)
+        with open(str(self.filename), "wb") as f:
+            f.write(self.decrypted)
+            print("finish")
